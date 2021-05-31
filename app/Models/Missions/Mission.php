@@ -631,7 +631,7 @@ class Mission extends Model implements HasMedia
         $this->save();
 
         // Move to cloud storage
-        //$this->deployCloudFiles();
+        $this->deployCloudFiles();
 
         return $this;
     }
