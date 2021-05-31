@@ -8,23 +8,22 @@ use \stdClass;
 use Carbon\Carbon;
 use App\Helpers\ArmaConfig;
 use App\Helpers\ArmaScript;
-use App\Models\Portal\User;
-use Spatie\MediaLibrary\Models\Media;
 use App\Helpers\ArmaConfigError;
+use App\Helpers\PBOMission\PBOMission;
+use App\Helpers\PBOMission\PBOFile\PBOFile;
+use App\Models\Portal\User;
+use App\Models\Operations\OperationMission;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Kingsley\References\Models\Reference;
-use App\Models\Operations\OperationMission;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use App\Helpers\PBOMission\PBOMission;
-use App\Helpers\PBOMission\PBOFile\PBOFile;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Mission extends Model implements HasMedia
 {
-    use Notifiable,
-        HasMediaTrait;
+    use Notifiable;
+    use InteractsWithMedia;
 
     public $factions = [
         0 => "Opfor",
@@ -145,58 +144,6 @@ class Mission extends Model implements HasMedia
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-
-        static::created(function (Model $model) {
-            $model->reference()->save(
-                new Reference([
-                    'hash' => $model->makeReferenceHash()
-                ])
-            );
-        });
-    }
-
-    /**
-     * Gets the reference for the model.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\MorphOne
-     */
-    public function reference()
-    {
-        return $this->morphOne(Reference::class, 'model');
-    }
-
-    /**
-     * Makes a new reference hash.
-     *
-     * @return string
-     */
-    public function makeReferenceHash()
-    {
-        if (property_exists($this, 'referencePrefix')) {
-            if (is_null($this->referencePrefix)) {
-                return Str::random(12);
-            } else {
-                return $this->referencePrefix . '_' . Str::random(12);
-            }
-        }
-
-        if (config('references.prefix')) {
-            $prefix = substr(strtolower(class_basename(get_class($this))), 0, 3);
-
-            return $prefix . '_' . Str::random(12);
-        }
-
-        return Str::random(12);
-    }
-
-    /**
-     * Gets the ref attribute.
-     *
-     * @return string
-     */
-    public function getRefAttribute()
-    {
-        return optional($this->reference)->hash;
     }
 
     /**
@@ -204,7 +151,7 @@ class Mission extends Model implements HasMedia
      *
      * @return void
      */
-    public function registerMediaConversions(Media $media = null)
+    public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->width(384)
@@ -684,7 +631,7 @@ class Mission extends Model implements HasMedia
         $this->save();
 
         // Move to cloud storage
-        $this->deployCloudFiles();
+        //$this->deployCloudFiles();
 
         return $this;
     }
