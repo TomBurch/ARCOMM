@@ -20,7 +20,6 @@
     "require": {
         "php": ">=7.0.0",
         "austinb/gameq": "3.x-dev",
-        "chumper/zipper": "1.0.x",
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "^6.3",
         "invisnik/laravel-steam-auth": "^3.2.1",
@@ -29,7 +28,7 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "sentry/sentry-laravel": "^0.7.0",
-        "spatie/laravel-medialibrary": "^6.6.6",
+        "spatie/laravel-medialibrary": "7.6.*",
         "superbalist/flysystem-google-storage": "dev-master#093b7e4b46f37720109e9efa594782cd0b3ced02",
         "superbalist/laravel-google-cloud-storage": "dev-master#3cb952fd4599f31bacdf36379703e85dbd0f6157",
         "syntax/steam-api": "^2.0"
