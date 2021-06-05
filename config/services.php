@@ -37,7 +37,10 @@ return [
 
     'discord' => [
         'archub_webhook' => env('DISCORD_ARCHUB_WEBHOOK'),
-        'staff_webhook' => env('DISCORD_STAFF_WEBHOOK')
-    ]
+        'staff_webhook' => env('DISCORD_STAFF_WEBHOOK'),
+    ],
 
+    'datastore' => [
+        'key_file' => base_path('datastore.json'),
+    ]
 ];

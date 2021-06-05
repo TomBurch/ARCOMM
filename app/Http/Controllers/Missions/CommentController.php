@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Missions;
 
-use App\DiscordWebhook;
+use App\Discord\ChannelEnum;
+use App\Discord\DiscordWebhook;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Missions\Mission;
@@ -112,6 +113,8 @@ class CommentController extends Controller
 
     public static function discordNotify(MissionComment $comment)
     {
-        DiscordWebhook::notifyArchub("**{$comment->user->username}** commented on the mission **{$comment->mission->display_name}** {$comment->mission->url()}/aar#comment-{$comment->id}");
+        $url = "{$comment->mission->url()}/aar#comment-{$comment->id}";
+        $message = "**{$comment->user->username}** commented on **{$comment->mission->display_name}**";
+        DiscordWebhook::missionUpdate($message, $comment->mission, true, $url);
     }
 }

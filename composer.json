@@ -11,6 +11,7 @@
         "php": "^7.4",
         "austinb/gameq": "3.x-dev",
         "fideloper/proxy": "4.4.*",
+        "google/cloud-datastore": "^1.12",
         "guzzlehttp/guzzle": "^6.3",
         "invisnik/laravel-steam-auth": "^4.3",
         "laravel/framework": "6.20.*",

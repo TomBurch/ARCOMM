@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Missions;
 
-use App\DiscordWebhook;
+use App\Discord\ChannelEnum;
+use App\Discord\DiscordWebhook;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Missions\MissionNote;
@@ -85,7 +86,9 @@ class NoteController extends Controller
         $note->text = $request->text;
         $note->save();
 
-        DiscordWebhook::notifyArchub( "**{$note->user->username}** added a note to the mission **{$note->mission->display_name}** {$note->mission->url()}/notes#note-{$note->id}");
+        $url = "{$note->mission->url()}/notes#note-{$note->id}";
+        $content = "**{$note->user->username}** added a note to **{$note->mission->display_name}**";
+        DiscordWebhook::missionUpdate($content, $mission, true, $url);
 
         return view('missions.notes.item', compact('note'));
     }

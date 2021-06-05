@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Missions;
 
-use App\DiscordWebhook;
+use App\Discord\ChannelEnum;
+use App\Discord\DiscordWebhook;
 use Illuminate\Http\Request;
 use App\Models\Missions\Mission;
 use App\Http\Controllers\Controller;
@@ -71,7 +72,8 @@ class MissionController extends Controller
             // Delete local temp files
             Storage::deleteDirectory("missions/{$user->id}");
 
-            DiscordWebhook::notifyArchub("**{$mission->user->username}** submitted a mission named **{$mission->display_name}**");
+            $content = "**{$mission->user->username}** submitted a mission named **{$mission->display_name}**";
+            DiscordWebhook::missionUpdate($content, $mission, false, $mission->url());
 
             return $mission->url();
         }
@@ -188,7 +190,8 @@ class MissionController extends Controller
                 // Delete old cloud files
                 Storage::cloud()->delete("x{$old_mission_cloud_pbo_dir}");
                 
-                DiscordWebhook::notifyArchub("**{$revision->user->username}** updated the mission **{$revision->mission->display_name}**");
+                $content = "**{$revision->user->username}** has updated **{$revision->mission->display_name}**";
+                DiscordWebhook::missionUpdate($content, $revision->mission);
 
                 return view('missions.show', compact('mission'));
             }
@@ -266,7 +269,8 @@ class MissionController extends Controller
         $mission->save();
 
         if ($mission->verified) {
-            DiscordWebhook::notifyArchub("**{$mission->verifiedByUser()->username}** verified the mission **{$mission->display_name}**");
+            $content = "**{$mission->verifiedByUser()->username}** has verified **{$mission->display_name}**";
+            DiscordWebhook::missionUpdate($content, $mission, true);
         }
 
         $updated_by = auth()->user()->username;

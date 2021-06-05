@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\DiscordWebhook;
+use App\Discord\ChannelEnum;
+use App\Discord\DiscordWebhook;
 use App\Models\Portal\User;
 use App\Models\Portal\SteamAPI;
 use Illuminate\Console\Command;
@@ -58,6 +59,6 @@ class PurgeNonMembers extends Command
             $failedBag->push("**{$user->username}** could not be automatically purged from ARCHUB as they have {$missions->count()} mission(s) uploaded.");
         }
 
-        DiscordWebhook::notifyStaff("{$passedBag->implode("\n")}\n\n{$failedBag->implode("\n")}");
+        DiscordWebhook::notifyChannel(ChannelEnum::Staff, "{$passedBag->implode("\n")}\n\n{$failedBag->implode("\n")}");
     }
 }
