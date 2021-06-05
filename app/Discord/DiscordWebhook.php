@@ -10,6 +10,29 @@ use Google\Cloud\Datastore\DatastoreClient;
 
 class DiscordWebhook
 {
+    private static $datastore;
+    private static $client;
+
+    private static function Client() {
+        if (self::$client) {
+            return self::$client;
+        }
+        self::$client = new Client(
+            ['headers' => ['Content-Type' => 'application/json']
+        ]);
+        return self::$client;
+    }
+
+    private static function Datastore() {
+        if (self::$datastore) {
+            return self::$datastore;
+        }
+        self::$datastore = new DatastoreClient([
+            'keyFilePath' => config('services.datastore.key_file')       
+        ]);
+        return self::$datastore;
+    }
+
     public static function missionUpdate(string $content, Mission $mission, bool $tagAuthor = false, string $url = null)
     {
         if ($tagAuthor && ($mission->user->steam_id != auth()->user()->steam_id)) {
@@ -28,9 +51,8 @@ class DiscordWebhook
 
     public static function notifyChannel(string $channel, string $content)
     {
-        $client = new Client(['headers' => ['Content-Type' => 'application/json']]);
         $webhook = self::getWebhookFromChannel($channel);
-        $response = $client->request('POST', $webhook, [
+        $response = self::Client()->request('POST', $webhook, [
             'json' => ['content' => $content],
         ]);
 
@@ -55,16 +77,12 @@ class DiscordWebhook
 
     private static function getDiscordIdFromUser(User $user)
     {
-        $datastore = new DatastoreClient([
-            'keyFilePath' => config('services.datastore.key_file')       
-        ]);
-        
-        $query = $datastore->query()
+        $query = self::Datastore()->query()
         ->kind('DiscordIdentifier')
         ->filter('SteamID', '=', (int)$user->steam_id)
         ->limit(1);
         
-        $results = $datastore->runQuery($query);
+        $results = self::Datastore()->runQuery($query);
         $discordId = null;
         foreach ($results as $entity) {
             $discordId = $entity['DiscordID'];
