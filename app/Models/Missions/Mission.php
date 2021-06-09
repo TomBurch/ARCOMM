@@ -112,15 +112,6 @@ class Mission extends Model implements HasMedia
     ];
 
     /**
-     * Appended attributes.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'ref'
-    ];
-
-    /**
      * Side represented as an integer as used by TMF_OrbatSettings
      * From: https://community.bistudio.com/wiki/BIS_fnc_sideID
      * 
