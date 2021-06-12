@@ -23,23 +23,23 @@
 @endif
 
 @section('nav-right')
-    @if (auth()->user()->hasPermission('mission:verification'))
+    @if (auth()->user()->isMissionTester())
         @include('missions.show.verification')
     @endif
 
-    @if ($mission->isMine() || auth()->user()->hasPermission('mission:notes'))
+    @if ($mission->isMine() || auth()->user()->isMissionTester())
         @include('missions.show.revisions')
     @endif
 
-    @if ($mission->isMine() || auth()->user()->hasPermission('mission:download'))
+    @if ($mission->isMine() || auth()->user()->isMissionTester())
         @include('missions.show.download')
     @endif
 
-    @if ($mission->isMine() || auth()->user()->hasPermission('mission:update'))
+    @if ($mission->isMine() || auth()->user()->isMissionTester())
         @include('missions.show.manage')
     @endif
 
-    @if (auth()->user()->hasPermission('mission:share'))
+    @if (auth()->user()->isMissionTester())
         @include('missions.show.share')
     @endif
 @endsection
@@ -77,7 +77,7 @@
         </h1>
 
         <h3 class="mission-author">
-            By {{ $mission->user->username }}
+            By {{ $mission->user->name }}
         </h3>
 
         <header class="mission-nav">
@@ -114,7 +114,7 @@
                     class="subnav-link ripple"
                 >Media</a>
 
-                @if (auth()->user()->hasPermission('mission:notes') || $mission->isMine())
+                @if (auth()->user()->isMissionTester() || $mission->isMine())
                     <a
                         href="javascript:void(0)"
                         data-panel="addons"

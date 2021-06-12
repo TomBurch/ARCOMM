@@ -100,7 +100,7 @@
                     <table class="table w100">
                         @foreach ($operation->attendances->groupBy('user_id') as $user => $attendances)
                             <tr>
-                                <td align="left">{{ $attendances[0]->user->username }}</td>
+                                <td align="left">{{ $attendances[0]->user->name }}</td>
                                 @foreach ($attendances as $attendance)
                                     <td width="150" align="right">
                                         @if ($attendance->present)

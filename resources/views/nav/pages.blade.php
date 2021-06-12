@@ -1,30 +1,30 @@
 <a href="{{ url('/hub/missions') }}" class="nav-item nav-link hidden-sm-down active">Missions</a>
 
-@if (auth()->user()->hasPermission('operations:all'))
+@if (auth()->user()->isMissionTester())
     <a href="{{ url('/hub/operations') }}" class="nav-item nav-link hidden-sm-down">
         Operations
     </a>
 @endif
 
-@if (auth()->user()->hasPermission('apps:view'))
+@if (auth()->user()->isMissionTester())
     <a href="{{ url('/hub/applications') }}" class="nav-item nav-link hidden-sm-down">
         Applications
     </a>
 @endif
 
-@if (auth()->user()->hasPermission('absences:view'))
+@if (auth()->user()->isMissionTester())
     <a href="{{ url('/hub/absence') }}" class="nav-item nav-link hidden-sm-down">
         Absences
     </a>
 @endif
 
-@if (auth()->user()->hasPermission('attendance:view'))
+@if (auth()->user()->isMissionTester())
     <a href="{{ url('/hub/attendance') }}" class="nav-item nav-link hidden-sm-down">
         Attendance
     </a>
 @endif
 
-@if (auth()->user()->hasPermission('users:all'))
+@if (auth()->user()->isMissionTester())
     <a href="{{ url('/hub/users') }}" class="nav-item nav-link hidden-sm-down">
         Users
     </a>
@@ -86,31 +86,31 @@
                 Missions
             </a>
 
-            @if (auth()->user()->hasPermission('operations:all'))
+            @if (auth()->user()->isMissionTester())
                 <a href="{{ url('/hub/operations') }}" class="list-group-item list-group-item-action">
                     Operations
                 </a>
             @endif
 
-            @if (auth()->user()->hasPermission('apps:view'))
+            @if (auth()->user()->isMissionTester())
                 <a href="{{ url('/hub/applications') }}" class="list-group-item list-group-item-action">
                     Applications
                 </a>
             @endif
 
-            @if (auth()->user()->hasPermission('absences:view'))
+            @if (auth()->user()->isMissionTester())
                 <a href="{{ url('/hub/absence') }}" class="list-group-item list-group-item-action">
                     Absences
                 </a>
             @endif
 
-            @if (auth()->user()->hasPermission('attendance:view'))
+            @if (auth()->user()->isMissionTester())
                 <a href="{{ url('/hub/attendance') }}" class="list-group-item list-group-item-action">
                     Attendance
                 </a>
             @endif
 
-            @if (auth()->user()->hasPermission('users:all'))
+            @if (auth()->user()->isMissionTester())
                 <a href="{{ url('/hub/users') }}" class="list-group-item list-group-item-action">
                     Users
                 </a>

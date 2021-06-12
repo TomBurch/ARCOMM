@@ -14,7 +14,7 @@
         </h4>
 
         <h6 class="mission-item-author">
-            By {{ $mission->user->username }} on {{ $mission->map->display_name }}
+            By {{ $mission->user->name }} on {{ $mission->map->display_name }}
         </h6>
 
         <p class="mission-item-summary">
@@ -27,7 +27,7 @@
             {{ $mission->mode }}
         </span> --}}
 
-        @if (($mission->isMine() || auth()->user()->hasPermission('mission:verification')) && !$mission->verified)
+        @if (($mission->isMine() || auth()->user()->isMember()) && !$mission->verified)
             <span class="mission-item-verified" title="Not verified">!</span>
         @endif
     </div>

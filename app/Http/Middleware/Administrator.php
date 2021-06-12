@@ -20,7 +20,7 @@ class Administrator
             return;
         }
 
-        if (!auth()->user()->hasPermission('global:all')) {
+        if (!auth()->user()->isMissionTester()) {
             abort(404, 'Not an administrator');
             return;
         }

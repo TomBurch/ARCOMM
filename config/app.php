@@ -154,7 +154,6 @@ return [
         App\Providers\HelperServiceProvider::class,
 
         Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
-        Syntax\SteamApi\SteamApiServiceProvider::class,
         Laravel\Tinker\TinkerServiceProvider::class,
         Superbalist\LaravelGoogleCloudStorage\GoogleCloudStorageServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,

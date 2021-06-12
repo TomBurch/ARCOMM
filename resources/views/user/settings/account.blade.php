@@ -33,7 +33,7 @@
 
 <div class="row">
     <a href="javascript:void(0)" class="btn btn-primary m-x-auto m-t-1" id="avatar-sync">
-        Sync From Steam
+        Sync From Discord
     </a>
 </div>
 
@@ -41,7 +41,7 @@
     <form method="post" class="m-x-auto col-md-4" id="update-account">
         <div class="form-group">
             <label class="w-100 text-xs-center">Username</label>
-            <input type="text" name="username" class="form-control text-xs-center" placeholder="Username" value="{{ auth()->user()->username }}" maxlength="30">
+            <input type="text" name="username" class="form-control text-xs-center" placeholder="Username" value="{{ auth()->user()->name }}" maxlength="30">
         </div>
 
         <div class="form-group text-xs-center">

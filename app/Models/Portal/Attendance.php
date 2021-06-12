@@ -60,7 +60,7 @@ class Attendance extends Model
     {
         return static::wherePresent(false)->with('user')->get()->reject(function ($attendance) {
             return $attendance->booked();
-        })->groupBy('user.username')->map(function ($user) {
+        })->groupBy('user.name')->map(function ($user) {
             return $user->groupBy('operation_id')->count();
         })->reject(function ($missed) {
             return $missed < 4;

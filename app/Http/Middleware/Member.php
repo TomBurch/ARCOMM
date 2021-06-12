@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Steam;
-use App\Models\Portal\SteamAPI;
 use App\Models\Portal\User;
 
 class Member

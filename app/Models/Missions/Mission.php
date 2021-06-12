@@ -375,7 +375,7 @@ class Mission extends Model implements HasMedia
         $download = 'ARC_' .
             strtoupper($this->mode == 'adversarial' ? 'tvt' : $this->mode) . '_' .
             Str::studly($this->display_name) . '_' .
-            trim(substr($this->user->username, 0, 4)) . '_' .
+            trim(substr($this->user->name, 0, 4)) . '_' .
             $revisions . '.' .
             $this->map->class_name . '.' . $format;
 
@@ -857,7 +857,7 @@ class Mission extends Model implements HasMedia
         if($briefings != null) {
             foreach($briefings as $briefing) {
                 $factionId = $this->parseFactionId($briefing[1][0]);
-                if(!$factionLocks[$factionId] || auth()->user()->hasPermission('mission:view_locked_briefings') || $this->isMine()) {
+                if(!$factionLocks[$factionId] || auth()->user()->isMissionTester() || $this->isMine()) {
                     $nav = new stdClass();
                     $nav->name = $briefing[0];
                     $nav->faction = $factionId;

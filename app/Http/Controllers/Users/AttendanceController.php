@@ -44,11 +44,7 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['mission_id' => 'required']);
-
-        (new CollectAttendance($request->mission_id))->handle(false);
-
-        return redirect('/hub/attendance');
+        //
     }
 
     /**

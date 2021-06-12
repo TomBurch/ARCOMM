@@ -44,7 +44,7 @@ class NoteController extends Controller
      */
     public function index(Request $request, Mission $mission)
     {
-        if (!auth()->user()->hasPermission('mission:notes') && !$mission->isMine()) {
+        if (!auth()->user()->isMissionTester() && !$mission->isMine()) {
             return redirect($mission->url());
         }
 
@@ -85,7 +85,9 @@ class NoteController extends Controller
         $note->text = $request->text;
         $note->save();
 
-        Discord::notifyArchub( "**{$note->user->name}** added a note to the mission **{$note->mission->display_name}** {$note->mission->url()}/notes#note-{$note->id}");
+        $url = "{$note->mission->url()}/notes#note-{$note->id}";
+        $content = "**{$note->user->name}** added a note to **{$note->mission->display_name}**";
+        Discord::missionUpdate($content, $mission, true, $url);
 
         return view('missions.notes.item', compact('note'));
     }

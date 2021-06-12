@@ -31,7 +31,7 @@
                             <li class="list-group-item jr-item">
                                 <span class="jr-item-title">
                                     <img src="{{ $absence->user->avatar }}" class="img-circle m-r-1" width="32">
-                                    {{ $absence->user->username }}
+                                    {{ $absence->user->name }}
                                 </span>
 
                                 <br />

@@ -3,14 +3,10 @@
 namespace App\Models\Portal;
 
 use Auth;
-use Steam;
 use Carbon\Carbon;
 use App\Discord;
-use App\Models\Portal\SteamAPI;
 use App\Models\Missions\Mission;
 use App\Models\Operations\Absence;
-use App\Models\Permissions\Permission;
-use App\Models\Permissions\PermissionUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\HasMedia;
@@ -48,14 +44,14 @@ class User extends Authenticatable implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void {}
 
-    /**
-     * Checks whether the user is a member of the Steam group.
-     *
-     * @return boolean
-     */
     public function isMember()
     {
         return Discord::isMember($this);
+    }
+
+    public function isMissionTester()
+    {
+        return Discord::isMissionTester($this);
     }
 
     /**
@@ -81,82 +77,10 @@ class User extends Authenticatable implements HasMedia
         return Mission::where('user_id', $this->id)->orderBy('created_at', 'desc')->get();
     }
 
-    /**
-     * Checks if the user has the given permissions.
-     * All permissions must pass true.
-     *
-     * @return boolean
-     */
-    public function hasPermissions($names, $only_one = false)
+    public static function notInServer()
     {
-        foreach ($names as $name) {
-            $has_permission = $this->hasPermission($name);
-
-            if ($has_permission && $only_one) {
-                return true;
-            } else if (!$has_permission) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if the user has the given permission.
-     *
-     * @return boolean
-     */
-    public function hasPermission($name)
-    {
-        $permission = Permission::where('name', $name)->first();
-
-        if (!$permission) {
-            $permission = Permission::create(['name' => $name]);
-            return false;
-        }
-
-        return !is_null(
-            PermissionUser::where('user_id', $this->id)
-                ->where('permission_id', $permission->id)
-                ->first()
-        );
-    }
-
-    /**
-     * Gets all mission testers.
-     *
-     * @return Collection App\Models\Portal\User
-     */
-    public function missionTesters($ignore_auth = true)
-    {
-        return static::all()->filter(function($user) {
-            if ($ignore_auth) {
-                return $user->hasPermission('mission:notes');
-            } else {
-                // TODO
-                return $user->hasPermission('mission:notes');
-            }
-        });
-    }
-
-    /**
-     * Gets all unregistered users from the Steam group.
-     *
-     * @return Collection Steam API User Summaries
-     */
-    public static function unregistered()
-    {
-        $users = static::all();
-        $filtered = [];
-
-        foreach (SteamAPI::members() as $id) {
-            if (!$users->contains('steam_id', $id)) {
-                $filtered[] = $id;
-            }
-        }
-
-        return collect(Steam::user($filtered)->GetPlayerSummaries());
+        //TODO - Find users not in discord server
+        return User::all();
     }
 
     /**

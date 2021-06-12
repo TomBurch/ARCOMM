@@ -16,8 +16,8 @@ class AbsenceResource extends Resource
     {
         return [
             'user' => [
-                'name' => $this->user->username,
-                'steam_id' => $this->user->steam_id
+                'name' => $this->user->name,
+                'discord_id' => $this->user->discord_id
             ],
             'operation' => [
                 'starts_at' => $this->operation->starts_at

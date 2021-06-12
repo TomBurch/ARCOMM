@@ -14,7 +14,7 @@
 @section('content')
     <div class="container">
         <div class="card p-a-3">
-            @if (auth()->user()->hasPermission('apps:emails'))
+            @if (auth()->user()->isMissionTester())
                 <script>
                     $(document).ready(function(e) {
                         $('#send-app-email').click(function(event) {
@@ -66,7 +66,7 @@
                 </div>
             @endif
 
-            @if (auth()->user()->hasPermission('apps:change_status'))
+            @if (auth()->user()->isMissionTester())
                 <div id="status" class="pull-right">
                     @include('join.admin.status', [
                         'joinStatuses' => $joinStatuses,

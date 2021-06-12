@@ -44,7 +44,7 @@
     </div>
 </div>
 
-@if (auth()->user()->hasPermission('mission:see_new'))
+@if (auth()->user()->isMissionTester())
     @if (!$newMissions->isEmpty())
         <ul class="mission-group" data-title="New Missions">
             @foreach ($newMissions as $mission)

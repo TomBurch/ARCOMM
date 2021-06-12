@@ -29,11 +29,6 @@ class PageController extends Controller
 		return view('home.index', compact('banners', 'nextOp'));
 	}
 
-    /**
-     * Displays the Steam group roster.
-     *
-     * @return view
-     */
     public function roster()
     {
         $members = User::all();

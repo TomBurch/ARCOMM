@@ -79,7 +79,7 @@
         </a>
     @endforeach
 
-    @if (auth()->user()->hasPermission('apps:emails'))
+    @if (auth()->user()->isMissionTester())
         <script>
             $(document).ready(function(e) {
                 reloadEmails = function() {
