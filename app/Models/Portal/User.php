@@ -5,6 +5,7 @@ namespace App\Models\Portal;
 use Auth;
 use Steam;
 use Carbon\Carbon;
+use App\Discord;
 use App\Models\Portal\SteamAPI;
 use App\Models\Missions\Mission;
 use App\Models\Operations\Absence;
@@ -27,10 +28,10 @@ class User extends Authenticatable implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'steam_id',
-        'username',
+        'discord_id',
+        'name',
+        'email',
         'avatar',
-        'email'
     ];
 
     /**
@@ -54,17 +55,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function isMember()
     {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $members = (array) SteamAPI::members();
-        $members[] = config('steam-auth.webmaster_id');
-
-        return in_array(
-            Steam::convertId($this->steam_id, 'id64'),
-            $members
-        );
+        return Discord::isMember($this);
     }
 
     /**

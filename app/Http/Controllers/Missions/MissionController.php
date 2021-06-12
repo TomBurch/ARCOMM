@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Missions;
 
-use App\DiscordWebhook;
+use App\Discord;
 use Illuminate\Http\Request;
 use App\Models\Missions\Mission;
 use App\Http\Controllers\Controller;
@@ -71,7 +71,7 @@ class MissionController extends Controller
             // Delete local temp files
             Storage::deleteDirectory("missions/{$user->id}");
 
-            DiscordWebhook::notifyArchub("**{$mission->user->username}** submitted a mission named **{$mission->display_name}**");
+            Discord::notifyArchub("**{$mission->user->name}** submitted a mission named **{$mission->display_name}**");
 
             return $mission->url();
         }
@@ -188,7 +188,7 @@ class MissionController extends Controller
                 // Delete old cloud files
                 Storage::cloud()->delete("x{$old_mission_cloud_pbo_dir}");
                 
-                DiscordWebhook::notifyArchub("**{$revision->user->username}** updated the mission **{$revision->mission->display_name}**");
+                Discord::notifyArchub("**{$revision->user->name}** updated the mission **{$revision->mission->display_name}**");
 
                 return view('missions.show', compact('mission'));
             }
@@ -266,7 +266,7 @@ class MissionController extends Controller
         $mission->save();
 
         if ($mission->verified) {
-            DiscordWebhook::notifyArchub("**{$mission->verifiedByUser()->username}** verified the mission **{$mission->display_name}**");
+            Discord::notifyArchub("**{$mission->verifiedByUser()->name}** verified the mission **{$mission->display_name}**");
         }
 
         $updated_by = auth()->user()->username;

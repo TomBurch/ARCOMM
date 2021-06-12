@@ -1,5 +1,7 @@
 <?php
 
+use Laravel\Socialite\Facades\Socialite;
+
 //--- Home
 Route::get('/', 'PageController@index');
 
@@ -14,8 +16,9 @@ Route::get('/share/{mission}', 'ShareController@show');
 Route::get('/share/{mission}/{panel}', 'SharePanelController@show');
 Route::get('/share/{mission}/briefing/{faction}', 'ShareBriefingController@show');
 
-//--- Steam Authentication
-Route::get('/steamauth', 'AuthController@login');
+//--- Authentication
+Route::get('/auth/redirect', 'Auth\DiscordController@redirect');
+Route::get('/auth/callback', 'Auth\DiscordController@callback');
 
 //--- Public Applications
 Route::get('/join/acknowledged', 'PublicJoinController@acknowledged');

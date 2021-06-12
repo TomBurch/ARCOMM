@@ -18,11 +18,7 @@ class Member
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->guest()) {
-            return redirect('/');
-        }
-
-        if (!auth()->user()->isMember()) {
+        if (auth()->guest() || !auth()->user()->isMember()) {
             return redirect('/');
         }
 

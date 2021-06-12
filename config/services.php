@@ -36,8 +36,14 @@ return [
     ],
 
     'discord' => [
-        'archub_webhook' => env('DISCORD_ARCHUB_WEBHOOK'),
-        'staff_webhook' => env('DISCORD_STAFF_WEBHOOK')
-    ]
+        'client_id' => env('DISCORD_CLIENT_ID'),  
+        'client_secret' => env('DISCORD_CLIENT_SECRET'),  
+        'redirect' => env('DISCORD_REDIRECT_URI'),
+        'token' => env('DISCORD_TOKEN'),
 
+        'server_id' => env('DISCORD_SERVER_ID'),
+        'member_role' => env('DISCORD_MEMBER_ROLE'),
+        'archub_webhook' => env('DISCORD_ARCHUB_WEBHOOK'),
+        'staff_webhook' => env('DISCORD_STAFF_WEBHOOK'),
+    ]
 ];

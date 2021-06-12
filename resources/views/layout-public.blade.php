@@ -53,7 +53,7 @@
 
                         @if (auth()->guest())
                             <li>
-                                <a href="{{ url('/steamauth') }}" style="padding-top: 8px">
+                                <a href="{{ url('/auth/redirect') }}" style="padding-top: 8px">
                                     <img style="width: 81px" src="{{ url('/images/steam.png') }}" alt="Steam">
                                 </a>
                             </li>
