@@ -34,9 +34,12 @@ Route::post('/media/delete', 'MediaController@deletePhoto');
 Route::get('/roster', 'PageController@roster');
 
 //--- Attendance
+//Route::group(['middleware' => 'permission:attendance:view'], function () {
 Route::resource('/hub/attendance', 'Users\AttendanceController');
+//});
 
 //--- Admins
+//Route::group(['middleware' => 'permission:apps:all'], function () {
     // Route::get('/hub/applications/transfer', 'JoinController@transferOldRecords');
 Route::get('/hub/applications/api/items', 'Join\JoinController@items');
 Route::get('/hub/applications/show/{jr}', 'Join\JoinController@show');
@@ -52,15 +55,22 @@ Route::get('/hub/applications/api/{jr}/status', 'Join\JoinStatusController@show'
 Route::get('/hub/applications/{status}', 'Join\JoinController@index');
 
 Route::resource('/hub/applications', 'Join\JoinController');
+//});
 
+//Route::group(['middleware' => 'permission:apps:emails'], function () {
 // Email Templates
 Route::resource('/hub/applications/api/emails', 'Join\EmailTemplateController');
+//});
 
 //--- Operations
+//Route::group(['middleware' => 'permission:operations:all'], function () {
 Route::get('/hub/operations', 'Missions\OperationController@index');
+//});
 
+//Route::group(['middleware' => 'permission:operations:all'], function () {
 Route::resource('/api/operations', 'API\OperationController');
 Route::resource('/api/operations/missions', 'API\OperationMissionController');
+//});
 
 //--- Missions
 Route::group(['middleware' => 'member'], function () {
@@ -123,4 +133,6 @@ Route::group(['middleware' => 'member'], function () {
 });
 
 //--- User Management
+//Route::group(['middleware' => 'permission:users:all'], function () {
 Route::resource('/hub/users', 'Users\UserController');
+//});
