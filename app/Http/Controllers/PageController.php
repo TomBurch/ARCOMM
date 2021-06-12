@@ -25,7 +25,7 @@ class PageController extends Controller
             return url('images/'.$file);
         });
 
-		return view('home.index', compact('banners'));
+        return view('home.index', compact('banners'));
 	}
 
     /**
