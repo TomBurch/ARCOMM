@@ -12,17 +12,11 @@
     </a>
 @endif
 
-@if (auth()->user()->isMissionTester())
+@can('view-absences')
     <a href="{{ url('/hub/absence') }}" class="nav-item nav-link hidden-sm-down">
         Absences
     </a>
-@endif
-
-@if (auth()->user()->isMissionTester())
-    <a href="{{ url('/hub/attendance') }}" class="nav-item nav-link hidden-sm-down">
-        Attendance
-    </a>
-@endif
+@endcan
 
 @if (auth()->user()->isMissionTester())
     <a href="{{ url('/hub/users') }}" class="nav-item nav-link hidden-sm-down">
@@ -98,17 +92,11 @@
                 </a>
             @endif
 
-            @if (auth()->user()->isMissionTester())
+            @can('view-absences')
                 <a href="{{ url('/hub/absence') }}" class="list-group-item list-group-item-action">
                     Absences
                 </a>
-            @endif
-
-            @if (auth()->user()->isMissionTester())
-                <a href="{{ url('/hub/attendance') }}" class="list-group-item list-group-item-action">
-                    Attendance
-                </a>
-            @endif
+            @endcan
 
             @if (auth()->user()->isMissionTester())
                 <a href="{{ url('/hub/users') }}" class="list-group-item list-group-item-action">

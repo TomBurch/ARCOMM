@@ -47,16 +47,16 @@
                         <li><a href="{{ url('/media') }}">Media</a></li>
                         <li><a href="{{ url('join') }}">Join</a></li>
 
-                        @if (!auth()->guest() && auth()->user()->isMember())
-                            <li><a href="{{ url('/hub') }}">Hub</a></li>
-                        @endif
-
                         @if (auth()->guest())
                             <li>
                                 <a href="{{ url('/auth/redirect') }}" style="padding-top: 8px">
                                     <img style="width: 81px" src="{{ url('/images/steam.png') }}" alt="Steam">
                                 </a>
                             </li>
+                        @else
+                            @can('access-hub')
+                                <li><a href="{{ url('/hub') }}">Hub</a></li>
+                            @endcan
                         @endif
                     </ul>
                 </div>

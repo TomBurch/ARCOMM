@@ -33,11 +33,6 @@ Route::post('/media/delete', 'MediaController@deletePhoto');
 //--- Roster
 Route::get('/roster', 'PageController@roster');
 
-//--- Attendance
-//Route::group(['middleware' => 'permission:attendance:view'], function () {
-Route::resource('/hub/attendance', 'Users\AttendanceController');
-//});
-
 //--- Admins
 //Route::group(['middleware' => 'permission:apps:all'], function () {
     // Route::get('/hub/applications/transfer', 'JoinController@transferOldRecords');
@@ -73,7 +68,7 @@ Route::resource('/api/operations/missions', 'API\OperationMissionController');
 //});
 
 //--- Missions
-Route::group(['middleware' => 'member'], function () {
+Route::group(['middleware' => 'can:access-hub'], function () {
     // Mission Media
     Route::post('/hub/missions/media/add-photo', 'Missions\MediaController@uploadPhoto');
     Route::post('/hub/missions/media/delete-photo', 'Missions\MediaController@deletePhoto');

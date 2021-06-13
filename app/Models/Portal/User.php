@@ -44,27 +44,15 @@ class User extends Authenticatable implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void {}
 
-    public function isMember()
-    {
-        return Discord::isMember($this);
-    }
-
     public function isMissionTester()
     {
         return Discord::isMissionTester($this);
     }
 
-    /**
-     * Checks whether the user is an admin.
-     * Access level must be greater than 1.
-     *
-     * @return boolean
-     */
-    public function isAdmin()
+    public function hasRole(int $role)
     {
-        return $this->isMember() && $this->access_level > 1;
+        return Discord::hasRole($this, $role);
     }
-
 
     /**
      * Gets the user's missions.

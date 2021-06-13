@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Discord;
+use App\RoleEnum;
 use App\Models\Portal\User;
 use App\Http\Controllers\Controller;
 
@@ -32,7 +33,7 @@ class DiscordController extends Controller
     {
         $user = Socialite::driver('discord')->user();
 
-        if (Discord::isMember($user)) {
+        if (Discord::isMember($user->id)) {
             return $this->create($user);
         }
 
@@ -48,16 +49,22 @@ class DiscordController extends Controller
      */
     public function create($data)
     {
-        $user = User::create([
-            'discord_id' => $data->id,
-            'name' => $data->name,
-            'email' => $data->email,
-            'avatar' => $data->avatar,
-        ]);
+        $user = User::where('discord_id', $data->id)->first();
 
-        event(new Registered($user));
+        if (is_null($user)) {
+            $user = User::create([
+                'discord_id' => $data->id,
+                'name' => $data->name,
+                'email' => $data->email,
+                'avatar' => $data->avatar,
+            ]);
+        }
+
         auth()->login($user, true);
-
-        return redirect('/hub');
+        
+        if ($user->can('access-hub')) {
+            return redirect('/hub');
+        }
+        return redirect('/');
     }
 }

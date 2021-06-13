@@ -3,11 +3,11 @@
 namespace App;
 
 use App\ChannelEnum;
+use App\RoleEnum;
 use App\Models\Portal\User;
 use App\Models\Missions\Mission;
 
 use GuzzleHttp\Client;
-// use RestCord\DiscordClient;
 use Illuminate\Support\Facades\Cache;
 
 class Discord
@@ -30,8 +30,10 @@ class Discord
     // }
 
     private static $client;
+    private static $discord;
 
-    private static function Client() {
+    private static function Client() 
+    {
         if (self::$client) {
             return self::$client;
         }
@@ -39,6 +41,18 @@ class Discord
             ['headers' => ['Content-Type' => 'application/json']
         ]);
         return self::$client;
+    }
+
+    private static function DiscordClient() 
+    {
+        if (self::$discord) {
+            return self::$discord;
+        }
+        $botToken = config('services.discord.token');
+        self::$discord = new Client(
+            ['headers' => ['Authorization' => "Bot {$botToken}"]
+        ]);
+        return self::$discord;
     }
 
     public static function missionUpdate(string $content, Mission $mission, bool $tagAuthor = false, string $url = null)
@@ -81,29 +95,58 @@ class Discord
         }
     }
 
-    public static function isMember(User $user)
+    public static function isMember(int $discord_id)
     {
-        // return Cache::remember($user->id, 10, function () use ($user) {
-        //     $member = Discord::Restcord()->guild->getGuildMember([
-        //         'user.id' => (int)$user->discord_id,
-        //         'guild.id' => (int)config('services.discord.server_id'),
-        //     ]);
+        $roleId = self::getRoleIdFromRole(RoleEnum::Member);
+        $roles = self::getRoles($discord_id);
 
-        //     return in_array((int)config('services.discord.member_role'), $member->roles);
-        // });
-        return true;
+        return in_array($roleId, $roles);
     }
 
     public static function isMissionTester(User $user)
     {
-        // return Cache::remember($user->id, 10, function () use ($user) {
-        //     $member = Discord::Restcord()->guild->getGuildMember([
-        //         'user.id' => (int)$user->discord_id,
-        //         'guild.id' => (int)config('services.discord.server_id'),
-        //     ]);
-
-        //     return in_array((int)config('services.discord.member_role'), $member->roles);
-        // });
         return true;
+    }
+
+    public static function hasRole(User $user, int $role)
+    {
+        $roleId = self::getRoleIdFromRole($role);
+        $roles = self::getRoles($user->discord_id);
+
+        return in_array($roleId, $roles);
+    }
+
+    private static function getRoles(int $discord_id)
+    {
+        return Cache::remember($discord_id, 20, function() use ($discord_id) {
+            $guildId = config('services.discord.server_id');
+            $url = "https://discord.com/api/v8/guilds/{$guildId}/members/{$discord_id}";
+            $response = self::DiscordClient(['exceptions' => false])->request('GET', $url, ['exceptions' => false]);
+            if ($response->getStatusCode() == 200) {
+                $json = (array)json_decode($response->getBody());
+                return $json["roles"];
+            }
+            return array();
+        });
+    }
+
+    private static function getRoleIdFromRole(int $role)
+    {
+        if ($role == RoleEnum::Member)
+        {
+            return config('services.discord.member_role');
+        }
+        else if ($role == RoleEnum::Staff) 
+        {
+            return config('services.discord.staff_role');
+        }
+        else if ($role == RoleEnum::Tester)
+        {
+            return config('services.discord.tester_role');
+        }
+        else
+        {
+            throw new Exception("RoleId not found");
+        }
     }
 }
