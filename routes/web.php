@@ -121,6 +121,6 @@ Route::group(['middleware' => 'can:access-hub'], function () {
     ]);
 });
 
-Route::group(['middleware' => 'can:manage-users'], function () {
+Route::group(['middleware' => 'can:view-users'], function () {
     Route::resource('/hub/users', 'Users\UserController');
 });

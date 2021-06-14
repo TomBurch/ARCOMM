@@ -79,7 +79,7 @@
         </a>
     @endforeach
 
-    @can('manage-applications'))
+    @can('manage-applications')
         <script>
             $(document).ready(function(e) {
                 reloadEmails = function() {

@@ -114,13 +114,21 @@ class Discord
         {
             return config('services.discord.member_role');
         }
+        else if ($role == RoleEnum::Tester)
+        {
+            return config('services.discord.tester_role');
+        }
+        else if ($role == RoleEnum::SeniorTester)
+        {
+            return config('services.discord.senior_tester_role');
+        }
         else if ($role == RoleEnum::Staff) 
         {
             return config('services.discord.staff_role');
         }
-        else if ($role == RoleEnum::Tester)
+        else if ($role == RoleEnum::Admin)
         {
-            return config('services.discord.tester_role');
+            return config('services.discord.admin_role');
         }
         else
         {

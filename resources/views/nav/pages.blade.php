@@ -18,7 +18,7 @@
     </a>
 @endcan
 
-@can('manage-users')
+@can('view-users')
     <a href="{{ url('/hub/users') }}" class="nav-item nav-link hidden-sm-down">
         Users
     </a>
@@ -98,7 +98,7 @@
                 </a>
             @endcan
 
-            @can('manage-users')
+            @can('view-users')
                 <a href="{{ url('/hub/users') }}" class="list-group-item list-group-item-action">
                     Users
                 </a>

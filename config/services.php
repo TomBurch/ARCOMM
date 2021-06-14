@@ -44,7 +44,9 @@ return [
         'server_id' => env('DISCORD_SERVER_ID'),
         'member_role' => env('DISCORD_MEMBER_ROLE'),
         'tester_role' => env("DISCORD_TESTER_ROLE"),
+        'senior_tester_role' => env("DISCORD_SENIOR_TESTER_ROLE"),
         'staff_role' => env("DISCORD_STAFF_ROLE"),
+        'admin_role' => env("DISCORD_ADMIN_ROLE"),
 
         'archub_webhook' => env('DISCORD_ARCHUB_WEBHOOK'),
         'staff_webhook' => env('DISCORD_STAFF_WEBHOOK'),
