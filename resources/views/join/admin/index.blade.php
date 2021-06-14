@@ -79,7 +79,7 @@
         </a>
     @endforeach
 
-    @if (auth()->user()->isMissionTester())
+    @can('manage-applications'))
         <script>
             $(document).ready(function(e) {
                 reloadEmails = function() {
@@ -103,7 +103,7 @@
         </script>
 
         <a href="javascript:void(0)" class="subnav-link" id="app-emails">Email Templates</a>
-    @endif
+    @endcan
 @endsection
 
 @section('content')

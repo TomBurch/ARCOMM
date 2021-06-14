@@ -35,6 +35,20 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(RoleEnum::Tester);
         });
 
+        Gate::define('verify-missions', function($user) {
+            return $user->hasRole(RoleEnum::Tester);
+        });
+
+        Gate::define('manage-missions', function($user) {
+            // Includes updating and deleting missions
+            return $user->hasRole(RoleEnum::Staff);
+        });
+
+
+        Gate::define('share-missions', function($user) {
+            return $user->hasRole(RoleEnum::Staff);
+        });
+
         Gate::define('manage-operations', function($user) {
             return $user->hasRole(RoleEnum::Tester);
         });
@@ -47,11 +61,19 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(RoleEnum::Staff);
         });
 
+        Gate::define('manage-applications', function($user) {
+            return $user->hasRole(RoleEnum::Staff);
+        });
+
         Gate::define('view-absences', function($user) {
             return $user->hasRole(RoleEnum::Staff);
         });
 
-        Gate::define('send-emails', function($user) {
+        Gate::define('delete-media', function($user) {
+            return $user->hasRole(RoleEnum::Staff);
+        });
+
+        Gate::define('manage-public-media', function($user) {
             return $user->hasRole(RoleEnum::Staff);
         });
     }

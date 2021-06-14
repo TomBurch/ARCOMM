@@ -86,7 +86,7 @@ class MissionController extends Controller
      */
     public function show(Request $request, Mission $mission)
     {
-        if (!$mission->verified && !$mission->existsInOperation() && !auth()->user()->isMissionTester() && !$mission->isMine()) {
+        if (!$mission->verified && !$mission->existsInOperation() && !auth()->user()->can('test-missions') && !$mission->isMine()) {
             return redirect('/hub/missions?403=1');
         }
 
@@ -205,7 +205,7 @@ class MissionController extends Controller
      */
     public function destroy(Mission $mission)
     {
-        if ($mission->existsInOperation() && !auth()->user()->isMissionTester()) {
+        if ($mission->existsInOperation() && !auth()->user()->can('manage-missions')) {
             return redirect('/hub/missions/' . $mission->id);
         }
 
@@ -235,7 +235,7 @@ class MissionController extends Controller
     {
         $mission = Mission::find($request->mission_id);
 
-        if (!$mission->isMine() && !auth()->user()->isMissionTester()) {
+        if (!$mission->isMine() && !auth()->user()->can('manage-missions')) {
             abort(403, 'You are not authorised to edit this mission');
             return;
         }
@@ -294,7 +294,7 @@ class MissionController extends Controller
      */
     public function panel(Request $request, Mission $mission, $panel)
     {
-        if (!$mission->verified && !$mission->existsInOperation() && !auth()->user()->isMissionTester() && !$mission->isMine()) {
+        if (!$mission->verified && !$mission->existsInOperation() && !auth()->user()->can('test-missions') && !$mission->isMine()) {
             return redirect('/hub/missions?403=1');
         }
 

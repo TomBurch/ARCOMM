@@ -12,23 +12,6 @@ use Illuminate\Support\Facades\Cache;
 
 class Discord
 {
-    // /**
-    //  * The Discord client instance.
-    //  *
-    //  * @var \RestCord\DiscordClient
-    //  */
-    // protected static $restcord;
-
-    // private static function Restcord() {
-    //     if (self::$restcord) {
-    //         return self::$restcord;
-    //     }
-    //     self::$restcord = new DiscordClient(
-    //         ['token' => config('services.discord.token')]
-    //     );
-    //     return self::$restcord;
-    // }
-
     private static $client;
     private static $discord;
 
@@ -101,11 +84,6 @@ class Discord
         $roles = self::getRoles($discord_id);
 
         return in_array($roleId, $roles);
-    }
-
-    public static function isMissionTester(User $user)
-    {
-        return true;
     }
 
     public static function hasRole(User $user, int $role)

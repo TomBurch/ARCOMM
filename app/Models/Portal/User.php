@@ -44,11 +44,6 @@ class User extends Authenticatable implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void {}
 
-    public function isMissionTester()
-    {
-        return Discord::isMissionTester($this);
-    }
-
     public function hasRole(int $role)
     {
         return Discord::hasRole($this, $role);

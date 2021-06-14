@@ -44,7 +44,7 @@ class NoteController extends Controller
      */
     public function index(Request $request, Mission $mission)
     {
-        if (!auth()->user()->isMissionTester() && !$mission->isMine()) {
+        if (!auth()->user()->can('test-missions') && !$mission->isMine()) {
             return redirect($mission->url());
         }
 

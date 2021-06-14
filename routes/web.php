@@ -33,39 +33,33 @@ Route::post('/media/delete', 'MediaController@deletePhoto');
 //--- Roster
 Route::get('/roster', 'PageController@roster');
 
-//--- Admins
-//Route::group(['middleware' => 'permission:apps:all'], function () {
+Route::group(['middleware' => 'can:view-applications'], function () {
     // Route::get('/hub/applications/transfer', 'JoinController@transferOldRecords');
-Route::get('/hub/applications/api/items', 'Join\JoinController@items');
-Route::get('/hub/applications/show/{jr}', 'Join\JoinController@show');
+    Route::get('/hub/applications/api/items', 'Join\JoinController@items');
+    Route::get('/hub/applications/show/{jr}', 'Join\JoinController@show');
 
-Route::post('/hub/applications/api/send-email', 'Join\JoinController@email');
-Route::get('/hub/applications/api/email-submissions', 'Join\JoinController@emailSubmissions');
+    Route::post('/hub/applications/api/send-email', 'Join\JoinController@email');
+    Route::get('/hub/applications/api/email-submissions', 'Join\JoinController@emailSubmissions');
 
-// Statuses
-Route::post('/hub/applications/api/status', 'Join\JoinStatusController@store');
-Route::put('/hub/applications/api/{jr}/status', 'Join\JoinStatusController@update');
-Route::get('/hub/applications/api/{jr}/status', 'Join\JoinStatusController@show');
+    // Statuses
+    Route::post('/hub/applications/api/status', 'Join\JoinStatusController@store');
+    Route::put('/hub/applications/api/{jr}/status', 'Join\JoinStatusController@update');
+    Route::get('/hub/applications/api/{jr}/status', 'Join\JoinStatusController@show');
 
-Route::get('/hub/applications/{status}', 'Join\JoinController@index');
+    Route::get('/hub/applications/{status}', 'Join\JoinController@index');
 
-Route::resource('/hub/applications', 'Join\JoinController');
-//});
+    Route::resource('/hub/applications', 'Join\JoinController');
+});
 
-//Route::group(['middleware' => 'permission:apps:emails'], function () {
-// Email Templates
-Route::resource('/hub/applications/api/emails', 'Join\EmailTemplateController');
-//});
+Route::group(['middleware' => 'can:manage-applications'], function () {
+    Route::resource('/hub/applications/api/emails', 'Join\EmailTemplateController');
+});
 
-//--- Operations
-//Route::group(['middleware' => 'permission:operations:all'], function () {
-Route::get('/hub/operations', 'Missions\OperationController@index');
-//});
-
-//Route::group(['middleware' => 'permission:operations:all'], function () {
-Route::resource('/api/operations', 'API\OperationController');
-Route::resource('/api/operations/missions', 'API\OperationMissionController');
-//});
+Route::group(['middleware' => 'can:manage-operations'], function () {
+    Route::get('/hub/operations', 'Missions\OperationController@index');
+    Route::resource('/api/operations', 'API\OperationController');
+    Route::resource('/api/operations/missions', 'API\OperationMissionController');
+});
 
 //--- Missions
 Route::group(['middleware' => 'can:access-hub'], function () {
@@ -127,7 +121,6 @@ Route::group(['middleware' => 'can:access-hub'], function () {
     ]);
 });
 
-//--- User Management
-//Route::group(['middleware' => 'permission:users:all'], function () {
-Route::resource('/hub/users', 'Users\UserController');
-//});
+Route::group(['middleware' => 'can:manage-users'], function () {
+    Route::resource('/hub/users', 'Users\UserController');
+});
