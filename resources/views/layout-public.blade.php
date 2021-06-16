@@ -50,7 +50,8 @@
                         @if (auth()->guest())
                             <li>
                                 <a href="{{ url('/auth/redirect') }}" style="padding-top: 8px">
-                                    <img style="width: 81px" src="{{ url('/images/steam.png') }}" alt="Steam">
+                                    <span>Login</span>
+                                    <img style="width: 16px" src="{{ url('/images/discord.png') }}" alt="Discord">
                                 </a>
                             </li>
                         @else
