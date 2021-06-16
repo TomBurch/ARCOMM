@@ -9,8 +9,6 @@ Route::get('/arma3sync', function () {
     return redirect('https://docs.google.com/document/d/1i-LzCJE0l_7PtOj8WU717mmmzX1U2KaaNGEnj0KzkIw/view');
 });
 
-Route::get('/api/absence', 'API\AbsenceController@index');
-
 //--- Shared Missions
 Route::get('/share/{mission}', 'ShareController@show');
 Route::get('/share/{mission}/{panel}', 'SharePanelController@show');
@@ -100,9 +98,6 @@ Route::group(['middleware' => 'can:access-hub'], function () {
 
     // Panels
     Route::get('/hub/missions/{mission}/{panel}', 'Missions\MissionController@panel');
-
-    // Absence
-    Route::resource('/hub/absence', 'AbsenceController');
 
     Route::resource('/hub/missions', 'Missions\MissionController', [
         'except' => ['create', 'edit']

@@ -86,12 +86,6 @@
                 </a>
             @endcan
 
-            @can('view-absences')
-                <a href="{{ url('/hub/absence') }}" class="list-group-item list-group-item-action">
-                    Absences
-                </a>
-            @endcan
-
             @can('view-users')
                 <a href="{{ url('/hub/users') }}" class="list-group-item list-group-item-action">
                     Users
