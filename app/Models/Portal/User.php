@@ -24,7 +24,7 @@ class User extends Authenticatable implements HasMedia
      */
     protected $fillable = [
         'discord_id',
-        'name',
+        'username',
         'email',
         'avatar',
     ];
