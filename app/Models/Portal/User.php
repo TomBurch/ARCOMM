@@ -6,7 +6,6 @@ use Auth;
 use Carbon\Carbon;
 use App\Discord;
 use App\Models\Missions\Mission;
-use App\Models\Operations\Absence;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\HasMedia;
@@ -64,17 +63,5 @@ class User extends Authenticatable implements HasMedia
     {
         //TODO - Find users not in discord server
         return User::all();
-    }
-
-    /**
-     * Gets all absence announcements for the future.
-     *
-     * @return Collection App\Models\Operations\Absence
-     */
-    public function absences()
-    {
-        return Absence::where('user_id', $this->id)->get()->reject(function($absence) {
-            $absence->operation->starts_at >= Carbon::now();
-        });
     }
 }

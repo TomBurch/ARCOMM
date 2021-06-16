@@ -60,10 +60,6 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(RoleEnum::SeniorTester);
         });
 
-        Gate::define('view-absences', function($user) {
-            return $user->hasRole(RoleEnum::Staff);
-        });
-
         Gate::define('view-users', function($user) {
             return $user->hasRole(RoleEnum::Staff);
         });

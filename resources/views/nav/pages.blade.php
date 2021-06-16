@@ -12,12 +12,6 @@
     </a>
 @endcan
 
-@can('view-absences')
-    <a href="{{ url('/hub/absence') }}" class="nav-item nav-link hidden-sm-down">
-        Absences
-    </a>
-@endcan
-
 @can('view-users')
     <a href="{{ url('/hub/users') }}" class="nav-item nav-link hidden-sm-down">
         Users

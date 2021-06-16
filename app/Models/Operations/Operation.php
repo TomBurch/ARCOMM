@@ -113,27 +113,4 @@ class Operation extends Model
     {
         return $this == $this->nextWeek();
     }
-
-    /**
-     * Gets all absences for the operation.
-     *
-     * @return Collection App\Models\Operations\Absence
-     */
-    public function absences()
-    {
-        return $this->hasMany(Absence::class);
-    }
-
-    /**
-     * Gets the expected turnout.
-     *
-     * @return integer
-     */
-    public function expectedTurnout()
-    {
-        $userCount = User::count();
-        $absenceCount = $this->absences->count();
-
-        return $userCount - $absenceCount;
-    }
 }
