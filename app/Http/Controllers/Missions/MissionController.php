@@ -71,7 +71,7 @@ class MissionController extends Controller
             // Delete local temp files
             Storage::deleteDirectory("missions/{$user->id}");
 
-            $content = "**{$mission->user->name}** submitted a mission named **{$mission->display_name}**";
+            $content = "**{$mission->user->username}** submitted a mission named **{$mission->display_name}**";
             Discord::missionUpdate($content, $mission, false, $mission->url());
 
             return $mission->url();
@@ -189,7 +189,7 @@ class MissionController extends Controller
                 // Delete old cloud files
                 Storage::cloud()->delete("x{$old_mission_cloud_pbo_dir}");
                 
-                $content = "**{$revision->user->name}** has updated **{$revision->mission->display_name}**";
+                $content = "**{$revision->user->username}** has updated **{$revision->mission->display_name}**";
                 Discord::missionUpdate($content, $revision->mission);
 
                 return view('missions.show', compact('mission'));
@@ -268,11 +268,11 @@ class MissionController extends Controller
         $mission->save();
 
         if ($mission->verified) {
-            $content = "**{$mission->verifiedByUser()->name}** has verified **{$mission->display_name}**";
+            $content = "**{$mission->verifiedByUser()->username}** has verified **{$mission->display_name}**";
             Discord::missionUpdate($content, $mission, true);
         }
 
-        $updated_by = auth()->user()->name;
+        $updated_by = auth()->user()->username;
 
         return "Verified by {$updated_by}";
     }

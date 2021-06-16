@@ -113,7 +113,7 @@ class CommentController extends Controller
     public static function discordNotify(MissionComment $comment)
     {
         $url = "{$comment->mission->url()}/aar#comment-{$comment->id}";
-        $message = "**{$comment->user->name}** commented on **{$comment->mission->display_name}**";
+        $message = "**{$comment->user->username}** commented on **{$comment->mission->display_name}**";
         Discord::missionUpdate($message, $comment->mission, true, $url);
     }
 }

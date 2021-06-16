@@ -17,7 +17,7 @@ class CreateUsers extends Migration
         Schema::create('users', function($table) {
             $table->increments('id');
             $table->string('discord_id')->unique();
-            $table->string('name');
+            $table->string('username');
             $table->string('email')->nullable();
             $table->string('avatar');
             $table->timestamp('created_at')->useCurrent();
