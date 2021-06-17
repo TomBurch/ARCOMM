@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Discord;
 use App\Models\Portal\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,9 +17,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $nonMembers = User::notInServer();
 
-        return view('user.admin.index', compact('users', 'nonMembers'));
+        return view('user.admin.index', compact('users'));
     }
 
     /**
