@@ -23,7 +23,7 @@
 @endif
 
 @section('nav-right')
-    @can('verify-missions'))
+    @can('verify-missions')
         @include('missions.show.verification')
     @endcan
 
@@ -36,7 +36,7 @@
         @include('missions.show.manage')
     @endif
 
-    @can('share-missions'))
+    @can('share-missions')
         @include('missions.show.share')
     @endcan
 @endsection
