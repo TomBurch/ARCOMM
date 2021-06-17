@@ -58,10 +58,4 @@ class User extends Authenticatable implements HasMedia
     {
         return Mission::where('user_id', $this->id)->orderBy('created_at', 'desc')->get();
     }
-
-    public static function notInServer()
-    {
-        //TODO - Find users not in discord server
-        return User::all();
-    }
 }
