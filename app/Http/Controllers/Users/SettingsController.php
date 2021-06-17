@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\Request;
+use App\Discord;
 use App\Http\Controllers\Controller;
 use App\Models\Portal\User;
 
@@ -94,6 +95,10 @@ class SettingsController extends Controller
 
     public function avatarSync()
     {
-        // TODO: Sync avatar from discord
+        $user = auth()->user();
+        $user->avatar = Discord::getAvatar($user->discord_id);
+        $user->save();
+
+        return $user->avatar;
     }
 }

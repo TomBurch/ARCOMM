@@ -96,16 +96,13 @@ class Discord
 
     private static function getRoles(int $discord_id)
     {
-        return Cache::remember($discord_id, 20, function() use ($discord_id) {
-            $guildId = config('services.discord.server_id');
-            $url = "https://discord.com/api/v8/guilds/{$guildId}/members/{$discord_id}";
-            $response = self::DiscordClient(['exceptions' => false])->request('GET', $url, ['exceptions' => false]);
-            if ($response->getStatusCode() == 200) {
-                $json = (array)json_decode($response->getBody());
-                return $json["roles"];
-            }
-            return array();
-        });
+        return self::getUser($discord_id)["roles"];
+    }
+
+    public static function getAvatar(int $discord_id)
+    {
+        $avatarHash = ((array)self::getUser($discord_id)["user"])["avatar"];
+        return "https://cdn.discordapp.com/avatars/{$discord_id}/{$avatarHash}.jpg";
     }
 
     private static function getRoleIdFromRole(int $role)
@@ -134,5 +131,20 @@ class Discord
         {
             throw new Exception("RoleId not found");
         }
+    }
+
+    private static function getUser(int $discord_id)
+    {
+        return Cache::remember($discord_id, 10, function() use ($discord_id) {
+            $guildId = config('services.discord.server_id');
+            $url = "https://discord.com/api/v8/guilds/{$guildId}/members/{$discord_id}";
+            $response = self::DiscordClient(['exceptions' => false])->request('GET', $url, ['exceptions' => false]);
+            $status = $response->getStatusCode();
+            
+            if ($status == 200) {
+                return (array)json_decode($response->getBody());
+            }
+            throw new Exception("Error getting user from discord {$status}");
+        });
     }
 }
