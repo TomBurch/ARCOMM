@@ -24,9 +24,7 @@ class PageController extends Controller
             return url('images/'.$file);
         });
 
-        $nextOp = true;
-
-		return view('home.index', compact('banners', 'nextOp'));
+		return view('home.index', compact('banners'));
 	}
 
     public function roster()
