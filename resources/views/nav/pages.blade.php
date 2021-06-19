@@ -12,7 +12,11 @@
     </a>
 @endcan
 
+<<<<<<< HEAD
 @can('view-users')
+=======
+@if (auth()->user()->hasPermission('users:all'))
+>>>>>>> master
     <a href="{{ url('/hub/users') }}" class="nav-item nav-link hidden-sm-down">
         Users
     </a>
