@@ -11,9 +11,9 @@ use App\Helpers\ArmaScript;
 use App\Models\Portal\User;
 use Spatie\MediaLibrary\Models\Media;
 use App\Helpers\ArmaConfigError;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Kingsley\References\Models\Reference;
 use App\Models\Operations\OperationMission;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
@@ -112,15 +112,6 @@ class Mission extends Model implements HasMedia
     ];
 
     /**
-     * Appended attributes.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'ref'
-    ];
-
-    /**
      * Side represented as an integer as used by TMF_OrbatSettings
      * From: https://community.bistudio.com/wiki/BIS_fnc_sideID
      * 
@@ -144,58 +135,6 @@ class Mission extends Model implements HasMedia
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-
-        static::created(function (Model $model) {
-            $model->reference()->save(
-                new Reference([
-                    'hash' => $model->makeReferenceHash()
-                ])
-            );
-        });
-    }
-
-    /**
-     * Gets the reference for the model.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\MorphOne
-     */
-    public function reference()
-    {
-        return $this->morphOne(Reference::class, 'model');
-    }
-
-    /**
-     * Makes a new reference hash.
-     *
-     * @return string
-     */
-    public function makeReferenceHash()
-    {
-        if (property_exists($this, 'referencePrefix')) {
-            if (is_null($this->referencePrefix)) {
-                return str_random(12);
-            } else {
-                return $this->referencePrefix . '_' . str_random(12);
-            }
-        }
-
-        if (config('references.prefix')) {
-            $prefix = substr(strtolower(class_basename(get_class($this))), 0, 3);
-
-            return $prefix . '_' . str_random(12);
-        }
-
-        return str_random(12);
-    }
-
-    /**
-     * Gets the ref attribute.
-     *
-     * @return string
-     */
-    public function getRefAttribute()
-    {
-        return optional($this->reference)->hash;
     }
 
     /**
@@ -435,7 +374,7 @@ class Mission extends Model implements HasMedia
 
         $download = 'ARC_' .
             strtoupper($this->mode == 'adversarial' ? 'tvt' : $this->mode) . '_' .
-            studly_case($this->display_name) . '_' .
+            Str::studly($this->display_name) . '_' .
             trim(substr($this->user->username, 0, 4)) . '_' .
             $revisions . '.' .
             $this->map->class_name . '.' . $format;
@@ -629,7 +568,7 @@ class Mission extends Model implements HasMedia
     public function hasAddon($key)
     {
         foreach ($this->addons() as $addonName) {
-            if (starts_with(strtolower($addonName), strtolower($key))) {
+            if (Str::startsWith(strtolower($addonName), strtolower($key))) {
                 return true;
             }
         }
