@@ -7,37 +7,11 @@ use App\RoleEnum;
 use App\Models\Portal\User;
 use App\Models\Missions\Mission;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class Discord
 {
-    private static $client;
-    private static $discord;
-
-    private static function Client() 
-    {
-        if (self::$client) {
-            return self::$client;
-        }
-        self::$client = new Client(
-            ['headers' => ['Content-Type' => 'application/json']
-        ]);
-        return self::$client;
-    }
-
-    private static function DiscordClient() 
-    {
-        if (self::$discord) {
-            return self::$discord;
-        }
-        $botToken = config('services.discord.token');
-        self::$discord = new Client(
-            ['headers' => ['Authorization' => "Bot {$botToken}"]
-        ]);
-        return self::$discord;
-    }
-
     public static function missionUpdate(string $content, Mission $mission, bool $tagAuthor = false, string $url = null)
     {
         if ($tagAuthor && ($mission->user->id != auth()->user()->id)) {
@@ -55,8 +29,8 @@ class Discord
     public static function notifyChannel(string $channel, string $content)
     {
         $webhook = self::getWebhookFromChannel($channel);
-        $response = self::Client()->request('POST', $webhook, [
-            'json' => ['content' => $content],
+        $response = HTTP::post($webhook, [
+            'content' => $content,
         ]);
 
         return $response;
@@ -78,12 +52,31 @@ class Discord
         }
     }
 
-    public static function isMember(int $discord_id)
+    private static function getUser(int $discord_id)
     {
-        $roleId = self::getRoleIdFromRole(RoleEnum::Member);
-        $roles = self::getRoles($discord_id);
+        return Cache::remember($discord_id, 10, function() use ($discord_id) {
+            $url = "https://discord.com/api/v8/guilds/".config('services.discord.server_id')."/members/{$discord_id}";
+            $response = HTTP::withHeaders([
+                'Authorization' => "Bot ".config('services.discord.token')
+            ])->get($url);
+            
+            if ($response->successful()) {
+                return (array)$response->json();
+            }
 
-        return in_array($roleId, $roles);
+            throw new Exception("Error getting user from discord ". $response->status());
+        });
+    }
+
+    public static function getAvatar(int $discord_id)
+    {
+        $avatarHash = ((array)self::getUser($discord_id)["user"])["avatar"];
+        return "https://cdn.discordapp.com/avatars/{$discord_id}/{$avatarHash}.jpg";
+    }
+
+    private static function getRoles(int $discord_id)
+    {
+        return self::getUser($discord_id)["roles"];
     }
 
     public static function hasRole(User $user, int $role)
@@ -94,15 +87,12 @@ class Discord
         return in_array($roleId, $roles);
     }
 
-    private static function getRoles(int $discord_id)
+    public static function isMember(int $discord_id)
     {
-        return self::getUser($discord_id)["roles"];
-    }
+        $roleId = self::getRoleIdFromRole(RoleEnum::Member);
+        $roles = self::getRoles($discord_id);
 
-    public static function getAvatar(int $discord_id)
-    {
-        $avatarHash = ((array)self::getUser($discord_id)["user"])["avatar"];
-        return "https://cdn.discordapp.com/avatars/{$discord_id}/{$avatarHash}.jpg";
+        return in_array($roleId, $roles);
     }
 
     private static function getRoleIdFromRole(int $role)
@@ -131,20 +121,5 @@ class Discord
         {
             throw new Exception("RoleId not found");
         }
-    }
-
-    private static function getUser(int $discord_id)
-    {
-        return Cache::remember($discord_id, 10, function() use ($discord_id) {
-            $guildId = config('services.discord.server_id');
-            $url = "https://discord.com/api/v8/guilds/{$guildId}/members/{$discord_id}";
-            $response = self::DiscordClient(['exceptions' => false])->request('GET', $url, ['exceptions' => false]);
-            $status = $response->getStatusCode();
-            
-            if ($status == 200) {
-                return (array)json_decode($response->getBody());
-            }
-            throw new Exception("Error getting user from discord {$status}");
-        });
     }
 }
