@@ -6,6 +6,7 @@ use App\ChannelEnum;
 use App\RoleEnum;
 use App\Models\Portal\User;
 use App\Models\Missions\Mission;
+use Illuminate\Auth\Access\AuthorizationException;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -81,6 +82,9 @@ class Discord
 
     public static function hasRole(User $user, int $role)
     {
+        if (!auth()->guest() && is_null(auth()->user()->discord_id)) {
+            throw new AuthorizationException;
+        }
         $roleId = self::getRoleIdFromRole($role);
         $roles = self::getRoles($user->discord_id);
 
