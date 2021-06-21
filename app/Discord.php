@@ -16,8 +16,7 @@ class Discord
     public static function missionUpdate(string $content, Mission $mission, bool $tagAuthor = false, string $url = null)
     {
         if ($tagAuthor && ($mission->user->id != auth()->user()->id)) {
-            $discordId = auth()->user()->discord_id;
-            $content = "{$content} <@{$discordId}>";
+            $content = "{$content} <@{$mission->user->discord_id}>";
         }
 
         if (!is_null($url)) {
