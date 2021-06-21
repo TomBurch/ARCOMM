@@ -49,7 +49,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('manage-missions', function($user) {
             // Includes updating and deleting missions
-            return $user->hasRole(RoleEnum::SeniorTester);
+            // Admins only
         });
 
         Gate::define('share-missions', function($user) {
