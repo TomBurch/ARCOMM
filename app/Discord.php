@@ -65,7 +65,7 @@ class Discord
                 return (array)$response->json();
             }
 
-            throw new Exception("Error getting user from discord ". $response->status());
+            throw new AuthorizationException("Error getting user from discord ". $response->status());
         });
     }
 
