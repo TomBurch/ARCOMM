@@ -44,7 +44,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('verify-missions', function($user) {
-            return $user->hasRole(RoleEnum::Tester);
+            return $user->hasRole(RoleEnum::SeniorTester);
         });
 
         Gate::define('manage-missions', function($user) {
