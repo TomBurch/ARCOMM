@@ -42,6 +42,6 @@
 
         @if (auth()->user()->can('verify-missions') || $mission->verifiedByUser())
             <i class="fa fa-check"></i>
-        @endcan
+        @endif
     </a>
 </li>
