@@ -21,7 +21,7 @@ class Discord
         }
 
         if ($tagSubscribers) {
-            foreach (MissionSubscription::where("mission_id", "=", $mission->id)->cursor() as $subscriber) {
+            foreach (MissionSubscription::where("mission_id", $mission->id)->cursor() as $subscriber) {
                 $content = "{$content} <@{$subscriber->discord_id}>";
             }
         }
