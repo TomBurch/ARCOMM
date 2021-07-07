@@ -18,7 +18,8 @@
 
             $.ajax({
                 type: 'DELETE',
-                url: '{{ url('/hub/missions/'.$mission->id.'/notes') }}/' + caller.data('id'),
+                url: '{{ url("/hub/missions/notes") }}/' + caller.data('id'),
+
                 success: function(data) {
                     caller.parents('.mission-comment-item').remove();
                 }
@@ -32,7 +33,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{ url('/hub/missions/'.$mission->id.'/notes') }}',
+                url: '{{ url("/hub/missions/{$mission->id}/notes") }}',
                 data: form.serialize(),
                 beforeSend: function() {
                     $('*').blur();
