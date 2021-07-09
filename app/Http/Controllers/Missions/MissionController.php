@@ -214,10 +214,8 @@ class MissionController extends Controller
         return redirect('/hub/missions');
     }
 
-    public function orbat(Request $request)
+    public function orbat(Request $request, Mission $mission, string $faction)
     {
-        $mission = Mission::find($request->mission_id);
-        $faction = $request->faction;
         return view('missions.orbat', compact('mission', 'faction'));
     }
 
